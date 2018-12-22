@@ -1,0 +1,48 @@
+Project 2: Web Crawler
+
+Team Name: Titans
+
+Team Members:
+	1) Name: Madhura Hulsurkar
+	   NUID: 001610796
+	   email ID: hulsurkar.m@husky.neu.edu
+
+	2) Name: Sukumar Sekuri
+	   NUID: 001617682
+	   email ID: sekuri.s@husky.neu.edu
+
+
+Project Approach:
+
+1) As per the project requirements, need to write http request builders (GET and POST).
+2) To establish a socket connection before sending out a GET request and send out GET request.
+3) Cheak the response code and extract the csftoken and session id if the response code is 200.
+4) Use the POST header method from step 1) to send username and password (login) 
+5) Check http response - 
+        5.1 If 200 ok and check for valid usernae and password
+	5.2 if 300 or 301
+		get the redirect url using html parser from the response header
+	5.3 extract the csrf token value and goto 5) 
+	5.4 if not exit 
+
+6) Get the page from the redirect url and parse the urls store in the list by using HTML parser library.
+7) Also check for the response codes at each get and post requests and handle them accordingly.
+8) Get the page from the redirect url crawl the page for links by using the extracted csrf token values.
+	8.1 if the url is not in visited list add the links to a tovisit list  
+	8.2 look for the secret flag(s) within these pages and extract them and display these flags.
+
+9) Exit the loop once 5 flags have been fetched and printed.
+
+
+Challenges faced:
+1) Main challenge faced here was while writing the GET and POST headers.
+2) Handling all the response codes and executing the code gracefully.
+3) Searching for exactly 5 flags without taking a long time and exiting the loop as and when we get 5 flags.
+
+
+Overview:
+1) In this project, we have created GET and POST requests and logged in to a website called as Fakebook.
+2) This code we handle all the response codes and execute the code as per the requirements.
+3) Parsing of all the links has been done.
+4) Crawled of the links after secure login.
+5) Collected secret flags which were hidden in these links and displyed them.
