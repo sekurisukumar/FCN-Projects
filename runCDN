@@ -1,0 +1,19 @@
+ssh -i $10 $8@cs5700cdnproject.ccs.neu.edu "echo "DNS server is running";python cdn.py -p $2 -o $4" &
+
+ssh -i $10 $8@ec2-54-85-32-37.compute-1.amazonaws.com "echo "server one is running";python httpserver.py -p $2 -o $4" &
+
+ssh -i $10 $8@ec2-52-38-67-246.us-west-2.compute.amazonaws.com "echo "server two is running";python httpserver.py -p $2 -o $4" &
+
+ssh -i $10 $8@ec2-54-193-70-31.us-west-1.compute.amazonaws.com "echo "server three is running";python httpserver.py -p $2 -o $4" &
+
+ssh -i $10 $8@ec2-52-51-20-200.eu-west-1.compute.amazonaws.com "echo "server four is running";python httpserver.py -p $2 -o $4" &
+
+ssh -i $10 $8@ec2-54-169-117-213.ap-southeast-1.compute.amazonaws.com "echo "server five is running";python httpserver.py -p $2 -o $4" &
+
+ssh -i $10 $8@ec2-52-196-70-227.ap-northeast-1.compute.amazonaws.com "echo "server six is running";python httpserver.py -p $2 -o $4" &
+
+ssh -i $10 $8@ec2-52-63-206-143.ap-southeast-2.compute.amazonaws.com "echo "server seven is running";python httpserver.py -p $2 -o $4" &
+
+ssh -i $10 $8@ec2-54-233-185-94.sa-east-1.compute.amazonaws.com "echo "server eight is running";python httpserver.py -p $2 -o $4" &
+
+ssh -i $10 $8@ec2-52-29-65-165.eu-central-1.compute.amazonaws.com "echo "server nine is running";python httpserver.py -p $2 -o $4" &
