@@ -3,7 +3,6 @@
 import socket, sys, random, fcnt1, collections, urlparse
 from struct import *
 
-"""globals"""
 sack_no = 0
 sseq_no = 0
 cwnd = 1
@@ -27,7 +26,6 @@ def check_200(data):
           sys.exit()
 
 def store_data():
-#    print addict.items()
     content = collections.OrderedDict(sorted(addict.items()))
     f = open(file_name,'w')    
     for i in content:
@@ -38,19 +36,15 @@ def store_data():
 def pkt(flag,seq_num,ack_num,data,src_mac,dest_mac):
     tcp_head = tcp_header(flag,0,seq_num,ack_num)
     ps_head = pseudoheader(src_ip,dest_ip,tcp_head,data)
-    #Calculate checksum over pseudoheader
-    tcp_check = checksum(ps_head)
-    #Final TCP_ACK header
-    tcp_hdr = tcp_header(flag,tcp_check,seq_num,ack_num)
-    #Make IP header
-    ip_head = ip_header(0,src_ip,dest_ip)
-    #Final Packet
-    fin_pkt = ip_head + tcp_hdr + data
+    tcp_check = checksum(ps_head)					#Calculate checksum over pseudoheader
+    tcp_hdr = tcp_header(flag,tcp_check,seq_num,ack_num)		#Final TCP_ACK header
+    ip_head = ip_header(0,src_ip,dest_ip)				#Make IP header
+    fin_pkt = ip_head + tcp_hdr + data					#Final Packet
     ip_chksum = checksum(fin_pkt)
     ip_hdr = ip_header(ip_chksum,src_ip,dest_ip)
     ip_packet = ip_hdr + tcp_hdr + data
     ethernet_frame = ethernet(src_mac,dest_mac,0x0800,ip_packet)
-        
+    
     return ethernet_frame
 
 def tcp_header(flag,chk_sum,seq_num,ack_num):
@@ -139,7 +133,7 @@ def checksum(data):
     checksum = 0	       
     
     if len(data)%2!=0:
-    #    checksum = checksum + (ord(data[(len(data)-1)]) & socket.ntohs(0xFF00))
+       checksum = checksum + (ord(data[(len(data)-1)]) & socket.ntohs(0xFF00))
        data += chr(0)
   
     for i in range(0,len(data),2):
@@ -301,7 +295,6 @@ def serv_resp(seq,ack,flag,len_data,data):
     global cwnd
     
     if flag == 18:
-#       print "SYN - ACK"
        send_seq = ack
        send_ack = seq+1
        send_data = ""
@@ -327,7 +320,7 @@ def serv_resp(seq,ack,flag,len_data,data):
           get_req = "True"
     
     elif finish == "True":
-#       print "Finish"
+		
        send_seq = ack
        send_ack = seq + len_data
        send_data = ""
@@ -344,7 +337,7 @@ def serv_resp(seq,ack,flag,len_data,data):
        store_data()
 
     elif (flag == 16 or flag == 18 or flag == 24) and "HTTP" in data:
-#       print "ACK and HTTP"
+
        response = check_200(data)
        gather_data(seq,data)
        send_seq = ack
@@ -362,7 +355,7 @@ def serv_resp(seq,ack,flag,len_data,data):
 
 
     elif (flag == 16 or flag == 18 or flag == 24):
-#       print "ACK or SYN - ACK"
+
        if len(data) != 0:
           gather_data(seq,data)
           send_seq = ack
@@ -370,7 +363,7 @@ def serv_resp(seq,ack,flag,len_data,data):
           send_data = ""
           flag = "ack"
           packet = pkt(flag,send_seq,send_ack,send_data,src_mac,dest_mac)
-#          ack.append(send_ack)
+          ack.append(send_ack)
           send(packet)
           if cwnd <= 1000:
               cwnd = cwnd + 1
@@ -382,7 +375,6 @@ def serv_resp(seq,ack,flag,len_data,data):
           pass
     
     elif (flag == 25 or flag == 17 or flag == 1):
-#       print "FIN - ACK" 
        if len(data)!=0:
           gather_data(seq,data)
        finish = "True"
@@ -391,7 +383,7 @@ def serv_resp(seq,ack,flag,len_data,data):
        send_data = ""
        flag = "fa"
        packet = pkt(flag,send_seq,send_ack,send_data,src_mac,dest_mac)
-#       ack.append(send_ack)
+       ack.append(send_ack)
        send(packet)
        if cwnd <= 1000:
            cwnd = cwnd + 1
@@ -449,11 +441,11 @@ def destination_mac(src_ip,dest_ip,src_mac,iface):
     eth_sock.close()
     return destin_mac  
 
-#url = sys.argv[1]
+url = sys.argv[1]
 #url = "http://david.choffnes.com/classes/cs4700sp16/project4.php"
 #url = "http://david.choffnes.com/classes/cs4700sp16/2MB.log"
 #url = "http://david.choffnes.com/classes/cs4700sp16/10MB.log"
-url = "http://david.choffnes.com/classes/cs4700sp16/50MB.log"
+#url = "http://david.choffnes.com/classes/cs4700sp16/50MB.log"
 
 hostname = urlparse.urlparse(url).hostname
 port_no = 80
