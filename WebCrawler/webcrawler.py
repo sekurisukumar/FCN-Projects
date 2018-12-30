@@ -10,18 +10,14 @@ urls = []
 visited = []
 flags = []
 
-# Defining a function to download the first page
-
-def down_page(url):
+def down_page(url):								# Defining a function to download the first page
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                                   # Creating a socket for comunication with the server
     sock.connect((hostname, port_no))                                                          # Establishing a TCP connection with the Server  
     first_get= ("GET" + " %s" + " HTTP/1.1\n" + "Host:" +  hostname +"\r\n\r\n")%url           # Sending the GET request
     sock.send(first_get)
     response = sock.recv(4096)
 
-#Checking for the 200 response code and extracting csrftoken and sessionid
-
-    if "200" in response:                       
+    if "200" in response:                       #Checking for the 200 response code and extracting csrftoken and sessionid
         spl = response.split()
         for c_id in spl:
             if "csrftoken=" in c_id:
@@ -36,9 +32,7 @@ def down_page(url):
     else:
         error_handler1(response)   
 
-# Defining a function to login into fakebook and send a POST request
-
-def login_page(url):
+def login_page(url):						# Defining a function to login into fakebook and send a POST request
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((hostname, port_no))
     user = sys.argv[1]                                       #Passing the username as argument
@@ -52,9 +46,7 @@ def login_page(url):
     respo = sock.recv(4096)
     sock.close()
 
-# Checking for the 302 response code and extracting the Location url and sessionid
-
-    if "302" in respo:                      
+    if "302" in respo:                      	# Checking for the 302 response code and extracting the Location url and sessionid
         spl = respo.split()
         i = 0
         for word in spl:
